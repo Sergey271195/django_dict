@@ -1,7 +1,73 @@
 {% extends '_base.html' %}
-
+{% load main_extras %}
 {% block title %}Home{% endblock title %}
 
 {% block content %}
 <div class = 'container h25 text-center'>Home Page</div>
+    {% if user.is_authenticated %}
+        <h2>Hello {{user.username}}!</h2>
+        <a href = '{% url "logout" %}'>Log Out</a>
+    {% else %}
+        <h2>You are not logged in!</h2>
+        <a href = '{% url "login" %}'>Log In</a>
+    {% endif %}
+
+
+    <form>
+        <div class="container form-group">
+          <label for="word">The Word</label>
+          <input type="text" class="form-control" id="word" name='word' value='{{word}}' placeholder="Enter The Word">
+        </div>
+        <button class = 'btn btn-dark btn' type = 'submit'>Search</button>
+    </form>
+    <!-- RESULT -->
+    <div class = 'container-fluid my-5'>
+        <h1>{{search}}</h1>
+            <a href = '{% url "home" %}?word=bad'>Bad</a>
+            <div class = 'container my-5' id = 'general_info'>
+            {% if general_info %}
+                <h2>General information:</h2>
+                    <h3 class = 'ml-4 my-4'><span class ='font-weight-bold'>Transcription</span>: {{general_info.ure}} - {{general_info.transcription}}</h3>
+                    <h3 class = 'ml-4'><span class ='font-weight-bold'>Etymology</span>: {{general_info.etymology.text}}</h3>
+            {% endif %}
+            </div>
+            {% if definition %}
+            <div class = 'container my-5' id = 'definition'>
+            <h2>Definition:</h2>
+                {% for key, values in definition.items %}
+                <h2 class ='font-weight-bold'>{{key}}</h2>
+                    {% for key_2, values_2 in values.items %}
+                        {% if values_2.1 %}
+                            <div class = 'container m-4'>
+                            <h3>{{key_2}}</h3>
+                            {% for key_3, values_3 in values_2.items %}
+                                <div class = 'container ml-4 my-2'>
+                                <h3>{{key_3}}      :{{values_3.sense | random_filter}}</h3>
+                                {% if values_3.example %}
+                                <h3>example        :{{values_3.example}}</h3>
+                                {% endif %}
+                                {% if values_3.sdsense %}
+                                <h3>         - also:{{values_3.sdsense}}</h3>
+                                {% endif %}
+                                </div>
+                            {% endfor %}
+                            </div>
+                        {% else %}
+                        <div class = 'container m-4'>
+                            <h3>{{key_2}}      :{{values_2.sense}}</h3>
+                            {% if values_2.example %}
+                            <h3>example        :{{values_2.example}}</h3>
+                            {% endif %}
+                            {% if values_2.sdsense %}
+                            <h3>         - also:{{values_2.sdsense}}</h3>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                    <hr>
+                {% endfor %}
+            </div>
+            {% endif %}
+    </div>
+    <!-- --------------  -->
 {% endblock content %}
