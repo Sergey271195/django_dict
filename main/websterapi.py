@@ -113,6 +113,7 @@ class GetWordDefinition():
 
         response = r.json()
         data = response[0]
+        #print(data)
         if 'meta' not in data:
             print('Maybe you were looking for', response)
             return {'Error_links': response}
@@ -126,12 +127,16 @@ class GetWordDefinition():
                 self.general_info['ure'] = data['uros'][0]['ure']
                 if 'prs' in data['uros'][0]:
                     self.general_info['transcription'] = data['uros'][0]['prs'][0]['mw']
-                
-            definition = data['def']
-            all_sences = definition[0]['sseq']
-            #print(json.dumps(data, indent=2, sort_keys=True))
-            for index, sence in enumerate(all_sences):
-                self.scrap(index, sence)
+            if 'hwi' in data:
+                self.general_info['hw'] = data['hwi']['hw']
+                if 'prs' in data['hwi']:
+                    self.general_info['prs'] = data['hwi']['prs'][0]['mw']
+            if 'def' in data:    
+                definition = data['def']
+                all_sences = definition[0]['sseq']
+                #print(json.dumps(data, indent=2, sort_keys=True))
+                for index, sence in enumerate(all_sences):
+                    self.scrap(index, sence)
             return(self.result, self.general_info)
 
 
