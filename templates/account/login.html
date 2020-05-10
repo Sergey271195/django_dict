@@ -1,0 +1,36 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %}Login{% endblock title %}
+
+{% block content %}
+
+<div class = 'row d-flex justify-content-center my-5'>
+    <div class="card" style="width: 25rem;">
+        <div class="card-header">
+            Welcome to our website
+        </div>
+        <img class="card-img-top" src="{% static 'images/bookslogin.jpg' %}" alt="Card image cap">
+        <div class="card-body">
+        <h5 class="card-title">Log In</h5>
+        <p class="card-text"></p>
+            <form method = 'POST'>
+                {% csrf_token %}
+                <div class = 'conatiner-fluid'>
+                    <label>Username</label>
+                    <p>{{form.login}}</p>
+                </div>
+                <div class = 'conatiner-fluid'>
+                    <label>Password</label>
+                    <p>{{form.password}}</p>
+                </div>
+        
+                <button class = 'btn btn-dark btn' type = 'submit'>Log In</button>
+            </form>
+        </div>
+        <div class="card-footer text-muted">
+        Support our team!
+        </div>
+    </div>
+</div>
+{% endblock content %}

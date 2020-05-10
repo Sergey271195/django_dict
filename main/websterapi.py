@@ -26,37 +26,42 @@ class GetWordDefinition():
                 self.result[index][index_2] = {}
         
         all_links = []
-        for link in link_tags:
-            l = re.findall(link, definition)
-            l = [x[0] for x in l]
-            all_links = all_links + l
-            new_string = re.sub(link, '['+r'\g<link>'+']', new_string)
-        if index == 'etymology':
-            self.general_info[index]['links'] = all_links
-            self.general_info[index]['text'] = new_string
-        elif index_3 != 0:
-            self.result[index][index_2][index_3] = {}
-            if sdsense and example:
-                self.result[index][index_2][index_3]['sd_example'] = new_string
-            elif example:
-                self.result[index][index_2][index_3]['example'] = new_string
-            elif sdsense:
-                self.result[index][index_2][index_3]['sdlinks'] = all_links
-                self.result[index][index_2][index_3]['sdsense'] = new_string
+        try:
+            for link in link_tags:
+                
+                    l = re.findall(link, definition)
+                    l = [x[0] for x in l]
+                    all_links = all_links + l
+                    new_string = re.sub(link, '['+r'\g<link>'+']', new_string)
+            if index == 'etymology':
+                self.general_info[index]['links'] = all_links
+                self.general_info[index]['text'] = new_string
+            elif index_3 != 0:
+                if index_3 not in self.result[index][index_2]:
+                    self.result[index][index_2][index_3] = {}
+                if sdsense and example:
+                    self.result[index][index_2][index_3]['sd_example'] = new_string
+                elif example:
+                    self.result[index][index_2][index_3]['example'] = new_string
+                elif sdsense:
+                    self.result[index][index_2][index_3]['sdlinks'] = all_links
+                    self.result[index][index_2][index_3]['sdsense'] = new_string
+                else:
+                    self.result[index][index_2][index_3]['links'] = all_links
+                    self.result[index][index_2][index_3]['sense'] = new_string
             else:
-                self.result[index][index_2][index_3]['links'] = all_links
-                self.result[index][index_2][index_3]['sense'] = new_string
-        else:
-            if sdsense and example:
-                self.result[index][index_2]['sd_example'] = new_string
-            elif example:
-                self.result[index][index_2]['example'] = new_string
-            elif sdsense:
-                self.result[index][index_2]['sdlinks'] = all_links
-                self.result[index][index_2]['sdsense'] = new_string
-            else:
-                self.result[index][index_2]['links'] = all_links
-                self.result[index][index_2]['sense'] = new_string
+                if sdsense and example:
+                    self.result[index][index_2]['sd_example'] = new_string
+                elif example:
+                    self.result[index][index_2]['example'] = new_string
+                elif sdsense:
+                    self.result[index][index_2]['sdlinks'] = all_links
+                    self.result[index][index_2]['sdsense'] = new_string
+                else:
+                    self.result[index][index_2]['links'] = all_links
+                    self.result[index][index_2]['sense'] = new_string
+        except Exception as e:
+                    pass
 
     def scrap(self, index, data):
         for index_2, entry in enumerate(data):
@@ -64,15 +69,17 @@ class GetWordDefinition():
                 def_text = entry[1]['sense']['dt'][0][1]
                 self.linksearch(str(index), str(index_2), 0, def_text)
             elif 'pseq' in entry:
-                for index_3, ent in enumerate(entry[1]):
-                    def_text = ent[1]['dt'][0][1]
-                    self.linksearch(str(index), str(index_2), str(index_3+1), def_text)
-                    try:
-                        example = ent[1]['dt'][1][1][0]['t']
-                        self.linksearch(str(index), str(index_2), str(index_3+1), example, sdsense=False, example = True)
-                    except Exception as e:
-                        pass
-
+                    for index_3, ent in enumerate(entry[1]):
+                        try:
+                            def_text = ent[1]['dt'][0][1]
+                            self.linksearch(str(index), str(index_2), str(index_3+1), def_text, sdsense=False, example = False)
+                        except Exception as e:
+                            pass
+                        try:
+                            example = ent[1]['dt'][1][1][0]['t']
+                            self.linksearch(str(index), str(index_2), str(index_3+1), example, sdsense=False, example = True)
+                        except Exception as e:
+                            pass
             elif 'dt' in entry[1]:
                 # Check for uns
                 if 'uns' in entry[1]['dt'][0]:
@@ -140,6 +147,6 @@ class GetWordDefinition():
             return(self.result, self.general_info)
 
 
-word = GetWordDefinition('for').get_definition()
+word = GetWordDefinition('love').get_definition()
 
 

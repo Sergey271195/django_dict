@@ -1,0 +1,26 @@
+{% extends '_base.html' %}
+{% load static %}
+{% block title %}Logout{% endblock title %}
+
+{% block content %}
+<div class = 'row d-flex justify-content-center my-5'>
+    <div class="card" style="width: 25rem;">
+        <div class="card-header">
+        Thanks for your visit
+        </div>
+        <img class="card-img-top" src="{% static 'images/bookslogout.jpg' %}" alt="Card image cap">
+        <div class="card-body">
+        <h5 class="card-title">Log Out</h5>
+        <p class="card-text">Sure you want lo logout?</p>
+            <form method = 'POST' action = '{% url "account_logout" %}'>
+                {% csrf_token %}
+                {{form.csrfmiddlewaretoken}}
+                <button class = 'btn btn-dark btn' type = 'submit'>Log Out</button>
+            </form>
+        </div>
+        <div class="card-footer text-muted">
+        Support our team!
+        </div>
+    </div>
+</div>
+{% endblock content %}

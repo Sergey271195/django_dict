@@ -1,12 +1,13 @@
 {% extends '_base.html' %}
 {% load main_extras %}
+{% load static %}
 {% block title %}Home{% endblock title %}
 
 {% block content %}
     <form>
-        <div class = 'row my-5'>
+        <div class = 'container my-5'>
             <div class="container form-group row">
-                <label class="col-sm-2 col-form-label" for="word">The Word Dictionary</label>
+                <label class="col-sm-3 col-form-label" for="word">The Word Dictionary</label>
                 <div class = 'col-sm-5'>
                     <input type="text" class="form-control" id="word" name='word' value='{{word}}' placeholder="Enter The Word">
                 </div>
@@ -21,73 +22,93 @@
     <div class = 'container-fluid my-5'>
         {% if Error_links %}
             <div class = 'container my-5' id = 'Error_links'>
-                <h3>Maybe you were looking for...</h3>
-                <ol>
+                <h3>No entries for "{{search}}"</h3>
+                <h5>Maybe you were looking for...</h5>
+                <ol class ='font-weight-bold' type='1'>
                 {% for link in Error_links %}
                 <li class = 'm-1'><a href = '/?word={{link}}'>{{link}}</a></li>
                 {% endfor %}
-                </0l>
+                </ol>
             </div>
-        {% else %}
+        {% elif definition %}
             <div class = 'container my-5' id = 'general_info'>
-            <h3>{{search}}</h3>
+            <div class = 'bg-warning h3 w-25 text-center p-2'>{{search}}</div>
             {% if general_info %}
-                    <h5 class = 'ml-4 my-4'><span class ='font-weight-bold'>Transcription</span>: {{general_info.hw}} 
-                        | {{general_info.prs}}</h5>
-                    <h5 class = 'ml-4'><span class ='font-weight-bold'>Etymology</span>: {{general_info.etymology.text | link_filter | style_filter}}</h5>
+                    <p class = 'my-4'><span class ='font-weight-bold'>Transcription</span>: <em>{{general_info.hw}} 
+                        | {{general_info.prs}}</em></p>
+                    <p class = ''><span class ='font-weight-bold'>Etymology</span>: {{general_info.etymology.text | link_filter | style_filter}}</p>
             {% endif %}
             </div>
             {% if definition %}
             <div class = 'container my-5' id = 'definition'>
-            <h4>Definition:</h4>
-                <ol class ='font-weight-bold h4' type='1'>
+            <h3 class = 'border-bottom border-warning w-25'>Definition:</h3>
                 {% for key, values in definition.items %}
-                <li>
+
+
+                <div class = 'row border-bottom border-warning py-3 my-3'>
+                    
+                    <div class = 'col-1'>
+                        <div class = 'container'>
+                        <div class = 'container-fluid p-1 text-center bg-warning font-weight-bold'>{{key}}</div>
+                        </div>
+                    </div>
+
+                    <div class = 'col-10 px-3 py-2 '>
+                    <ol class ='font-weight-bold mt-0 p-0' type='a'>
                     {% for key_2, values_2 in values.items %}
                         {% if values_2.1 %}
-                            <div class = 'container m-4'>
-                            <h5>{{key_2}}</h5>
-                            {% for key_3, values_3 in values_2.items %}
-                                <div class = 'container ml-4 my-2'>
-                                <h5>{{key_3}}      {{values_3.sense | link_filter | style_filter}}</h5>
-                                {% if values_3.example %}
-                                <h5>example        {{values_3.example | link_filter | style_filter}}</h5>
-                                {% endif %}
-                                {% if values_3.sdsense %}
-                                <h5>         - also{{values_3.sdsense | link_filter | style_filter}}</h5>
-                                {% endif %}
+                            <li>
+                                <div class = 'container mx-2'>
+                                <ol class ='font-weight-bold' type='1'>
+                                {% for key_3, values_3 in values_2.items %}
+                                    <li>
+                                        <div class = 'container ml-4 my-2'>
+                                        <p class ='font-weight-light'>{{values_3.sense | link_filter | style_filter}}</p>
+                                        {% if values_3.example %}
+                                        <p class ='font-weight-light'>example        {{values_3.example | link_filter | style_filter}}</p>
+                                        {% endif %}
+                                        {% if values_3.sdsense %}
+                                        <p class ='font-weight-light'>         - also{{values_3.sdsense | link_filter | style_filter}}</p>
+                                        {% endif %}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                                </ol>   
                                 </div>
-                            {% endfor %}
-                            </div>
+                            </li>
                         {% elif '2)' in values %}
-                            <div class = 'container m-4'>
-                                <h5>{{key_2}}      {{values_2.sense | link_filter | style_filter}}</h5>
-                                {% if values_2.example %}
-                                <h5>example        {{values_2.example | link_filter | style_filter}}</h5>
-                                {% endif %}
-                                {% if values_2.sdsense %}
-                                <h5>         - also{{values_2.sdsense | link_filter | style_filter}}</h5>
-                                {% endif %}
-                            </div>
+                            <li>
+                                <div class = 'container mx-2'>
+                                    <p class ='font-weight-light'>{{values_2.sense | link_filter | style_filter}}</p>
+                                    {% if values_2.example %}
+                                    <p class ='font-weight-light'>example        {{values_2.example | link_filter | style_filter}}</p>
+                                    {% endif %}
+                                    {% if values_2.sdsense %}
+                                    <p class ='font-weight-light'>         - also{{values_2.sdsense | link_filter | style_filter}}</p>
+                                    {% endif %}
+                                </div>
+                            </li>
+
                         {% else %}
 
-                            <div class = 'container m-4'>
-                                <h5>               {{values_2.sense | link_filter | style_filter}}</h5>
+                            <div class = 'container mx-2'>
+                                <p class ='font-weight-light'>               {{values_2.sense | link_filter | style_filter}}</p>
                                 {% if values_2.example %}
-                                <h5>example        {{values_2.example | link_filter | style_filter}}</h5>
+                                <p class ='font-weight-light'>example        {{values_2.example | link_filter | style_filter}}</p>
                                 {% endif %}
                                 {% if values_2.sdsense %}
-                                <h5>         - also{{values_2.sdsense | link_filter | style_filter}}</h5>
+                                <p class ='font-weight-light'>         - also{{values_2.sdsense | link_filter | style_filter}}</p>
                                 {% endif %}
                             </div>
 
 
                         {% endif %}
+                        
                     {% endfor %}
-                    </li>
-                    <hr>
+                    </ol>
+                    </div>
+                </div>    
                 {% endfor %}
-                </ol>
             </div>
             {% endif %}
         {% endif %}

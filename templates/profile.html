@@ -1,0 +1,18 @@
+{% extends '_base.html' %}
+{% load static %}
+
+{% block title %}Profile{% endblock title %}
+
+{% block content %}
+<h1>Profile</h1>
+{% if user.is_authenticated %}
+<p>History</p>
+    {% for entry in profile %}
+        {{entry.history}}
+    {% endfor %}
+<p>Local History</p>
+    {% for entry in profile %}
+        {{entry.local_history}}
+    {% endfor %}
+{% endif %}
+{% endblock content %}
