@@ -1,18 +1,70 @@
 {% extends '_base.html' %}
+{% load main_extras %}
 {% load static %}
 
 {% block title %}Profile{% endblock title %}
 
 {% block content %}
-<h1>Profile</h1>
 {% if user.is_authenticated %}
-<p>History</p>
-    {% for entry in profile %}
-        {{entry.history}}
-    {% endfor %}
-<p>Local History</p>
-    {% for entry in profile %}
-        {{entry.local_history}}
-    {% endfor %}
+<div class = 'container-fluid w-75'>
+<div class = 'row'>
+    <div class = 'col-8'>
+        <h2 class = my-5>Quiz just for you!</h2>
+        <button class = 'btn btn-dark btn-block w-50' id = 'start_quiz'>Yeah! Let's do it!</button>
+
+            <div class="row mt-5">
+                <div class="col-3">
+                  <div class="nav flex-column nav-pills border-right border-dark" role="tablist" aria-orientation="vertical"  id= 'question_number'>
+
+                  </div>
+                </div>
+                <div class="col-9">
+                  <div class="tab-content container-fluid" id = 'question_content'>
+                      
+                  </div>
+                </div>
+              </div>
+        
+    </div>
+
+    <div class = 'col-4  border-bottom border-warning pb-5' style = 'max-height: 85vh;' id = 'settings_search'>
+    <div class = 'row mt-5 align-items-center h5 border-bottom border-warning pb-2'>Settings</div>
+    <div class = 'row my-4 align-items-center'>
+        <div class = 'col-8 align-items-center'>
+            <label class = 'm-0'>Choose which words to add</label>
+        </div>
+        <div class = 'col-4'>
+            <form method = "POST">
+                {% csrf_token %}
+            {%if added %}
+                <button class = 'btn btn-dark' id = 'add_chosen' name = 'add_chosen'>Add chosen</button>
+            {% else %}
+                <button class = 'btn btn-dark' id = 'add_all' name = 'add_all'>Add all</button>
+            {% endif %}
+            </form>
+        </div>
+    </div>
+
+            <div class = 'row align-items-center my-3 border-bottom border-warning py-2' >
+                <h5 class = 'm-0'>Search history</h5>
+                <input class="form-control w-50 mx-5 myInput" type='text' id = 'search' name = 'search'>
+            </div>
+            <div class = 'col' id = 'entries' style = 'max-height: 50vh; overflow-y: auto;'>
+                {% for entry in profile %}
+                <div class = 'row border my-1' id = '{{entry.word}}'>
+                    <a class="nav-link" style = 'color: orange' href= '/?word={{entry.word}}' role="tab" aria-controls="v-pills-home" aria-selected="false">{{entry.word | capitalize}}</a>
+                    <button class= 'btn btn-dark ml-auto deleteBtn' value = {{entry.word}} data= {{entry.word}}} >-</button>
+                </div>
+                {% endfor %}
+            </div>
+
+    </div>
+</div>
 {% endif %}
+</div>
 {% endblock content %}
+
+
+{% block extrajs %}
+<script  src="{% static 'js/profile.js' %}"></script>
+{% endblock extrajs %}

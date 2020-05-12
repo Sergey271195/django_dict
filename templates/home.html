@@ -4,6 +4,12 @@
 {% block title %}Home{% endblock title %}
 
 {% block content %}
+
+<div class = 'container-fluid w-75'>
+
+<div class = 'row'>
+
+<div class = 'col-8 mr-4'>
     <form>
         <div class = 'container my-5'>
             <div class="container form-group row">
@@ -32,7 +38,14 @@
             </div>
         {% elif definition %}
             <div class = 'container my-5' id = 'general_info'>
-            <div class = 'bg-warning h3 w-25 text-center p-2'>{{search}}</div>
+                <div class = 'row align-items-center' id = 'main_info'>
+                    <div class = 'bg-warning h3 w-25 text-center p-2 align-self-center'>{{search}}</div>
+                    {% if added %}
+                    <div class = 'h3 text-center py-2 px-4 align-self-center ml-4'>Added</div>
+                    {% else %}
+                    <div class = 'bg-dark h3 text-center py-2 px-4 align-self-center text-white myClass ml-4' id = 'add_button'  name = {{search}}>+</div>
+                    {% endif %}
+                </div>
             {% if general_info %}
                     <p class = 'my-4'><span class ='font-weight-bold'>Transcription</span>: <em>{{general_info.hw}} 
                         | {{general_info.prs}}</em></p>
@@ -48,9 +61,7 @@
                 <div class = 'row border-bottom border-warning py-3 my-3'>
                     
                     <div class = 'col-1'>
-                        <div class = 'container'>
                         <div class = 'container-fluid p-1 text-center bg-warning font-weight-bold'>{{key}}</div>
-                        </div>
                     </div>
 
                     <div class = 'col-10 px-3 py-2 '>
@@ -114,4 +125,21 @@
         {% endif %}
     </div>
     <!-- --------------  -->
+</div>
+
+{% if user.is_authenticated %}
+<div class = 'col-2 my-5'>
+    <h4>Local history</h4>
+        <div class="nav flex-column nav-pills" id="local_history" role="tablist" aria-orientation="vertical">
+        </div>
+</div>
+{% endif %}
+
+</div>
+
+</div>
 {% endblock content %}
+
+{% block extrajs %}
+<script  src="{% static 'js/base.js' %}"></script>
+{% endblock extrajs %}

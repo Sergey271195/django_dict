@@ -146,7 +146,17 @@ class GetWordDefinition():
                     self.scrap(index, sence)
             return(self.result, self.general_info)
 
+    def profile_search(self):
+        params = {'key': self.dict_api_key}
+        r = requests.get(self.url, params = params)
 
-word = GetWordDefinition('love').get_definition()
+        response = r.json()
+        data = response[0]
+        shortdef = data['shortdef']
+        return shortdef
+        
+
+
+word = GetWordDefinition('love').profile_search()
 
 

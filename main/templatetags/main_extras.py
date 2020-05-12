@@ -4,6 +4,9 @@ import re
 
 register = template.Library()
 
+def capitalize(value, is_safe = True):
+    return value.capitalize()
+
 def link_filter(value, is_safe = True):
     try:
         result = re.sub(r'(?<=\[)?(?P<link>\w+)\]?', r'\g<link>' , value)
@@ -42,3 +45,4 @@ def style_filter(value, is_safe = True):
 
 register.filter('link_filter', link_filter)
 register.filter('style_filter', style_filter)
+register.filter('capitalize', capitalize)

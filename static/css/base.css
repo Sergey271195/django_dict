@@ -1,0 +1,19 @@
+.myClass {
+    cursor: pointer;
+}
+
+.myClass:hover {
+    background-color: black;
+}
+
+.nav-pills > a.active.show {
+    background-color: orange;
+}
+
+.nav-pills > a.right {
+    background-color: #5cb85c;
+}
+
+.nav-pills > a.wrong {
+    background-color: #d9534f;
+}

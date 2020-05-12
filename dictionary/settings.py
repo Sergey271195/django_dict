@@ -139,4 +139,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 ACCOUNT_USERNAME_REQUIRED = True 
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_AUTHENTICATION_METHOD= 'username_email' 
+ACCOUNT_AUTHENTICATION_METHOD= 'username_email'
+DEFAULT_FROM_EMAIL = 'admin@djangodictionary.com' 
